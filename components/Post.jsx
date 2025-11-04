@@ -1,11 +1,22 @@
-import { Bookmark } from "lucide-react-native";
+import { Bookmark, BookmarkCheck } from "lucide-react-native";
+import { useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 export default function Post() {
+  const [isBookmarked, setIsBookmarked] = useState(false);
+
+  const handleBookmark = () => {
+    setIsBookmarked(!isBookmarked);
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
       <View style={styles.container}>
         <Text>This is one post</Text>
-        <Bookmark />
+        {isBookmarked ? (
+          <Bookmark onPress={handleBookmark} />
+        ) : (
+          <BookmarkCheck onPress={handleBookmark} />
+        )}
       </View>
     </ScrollView>
   );
