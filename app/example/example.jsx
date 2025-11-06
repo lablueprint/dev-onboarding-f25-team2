@@ -10,7 +10,7 @@ export default function Example() {
           resizeMode="contain"
         />
         <Text style={styles.subtitle}>
-          Use this page as an example on how to create and navigate between pages!
+          Use this page as an example on how to create and navigate between pages!!!
         </Text>
 
         <View style={styles.card}>
