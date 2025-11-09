@@ -1,10 +1,12 @@
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import AntDesign from '@expo/vector-icons/AntDesign';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
 export default function Post() {
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.container}>
             <Text>This is one post</Text>
+            <AntDesign name="comment" size={20} color="black" />
         </View>
     </ScrollView>
   );
