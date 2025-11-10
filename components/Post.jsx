@@ -1,8 +1,15 @@
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { useState } from 'react';
-import { ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, TextInput, View, Pressable } from 'react-native';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 export default function Post() {
+  const [liked, setLiked] = useState(false);
+  
+  const handleOnPress = () => {
+    setLiked(!liked);
+  }
+
   const [newComment, setNewComment] = useState('');
   const [allComments, setAllComments] = useState([]);
 
@@ -17,7 +24,13 @@ export default function Post() {
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.container}>
-            <Text>This is one post</Text>
+          <View style={styles.headerContainer}>
+              <Text>This is one post</Text>
+              <Pressable onPress={handleOnPress}>
+              { liked ? <FontAwesome name="heart" size={24} color="black"/> 
+                    : <FontAwesome name="heart-o" size={24} color="black"/> }
+              </Pressable>
+            </View>
             {allComments && allComments.length > 0 && 
               <>
                 <Text style={styles.commentsViewHeader}>Comments:</Text>
@@ -70,6 +83,12 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 1,
     borderColor: 'black',
+  },
+  headerContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'space-between',
+    justifyContent: 'center'
   },
   commentsViewContainer: {
     borderWidth: 1,
