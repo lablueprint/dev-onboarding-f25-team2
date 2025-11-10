@@ -18,9 +18,31 @@ export default function Post() {
     <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.container}>
             <Text>This is one post</Text>
-            <View style={styles.commentsWrapper}>
+            {allComments && allComments.length > 0 && 
+              <>
+                <Text style={styles.commentsViewHeader}>Comments:</Text>
+                <View style={styles.commentsViewContainer}>
+                  <ScrollView>
+                      {allComments.map((comment, id) => {
+                        return(
+                          <Text
+                            key={`comment_${id}`}
+                            style={[
+                              styles.commentsView,
+                              {backgroundColor: id%2==0 ? 'lightgrey' : '#f9fafb'},
+                            ]}
+                          >
+                            {comment}
+                          </Text>
+                        )
+                      })}
+                  </ScrollView>
+                </View>
+              </>
+            }
+            <View style={styles.commentsAddWrapper}>
               <TextInput
-                style={styles.comment}
+                style={styles.commentsInput}
                 placeholder="Enter a comment"
                 value={newComment}
                 onChangeText={setNewComment}
@@ -47,9 +69,23 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: 'black'
+    borderColor: 'black',
   },
-  commentsWrapper: {
+  commentsViewContainer: {
+    borderWidth: 1,
+    borderRadius: 2,
+    width: 200+4+4+20, // textbox width + left and right textbox padding + comment icon width
+    height: 100,
+  },
+  commentsViewHeader: {
+    padding: 4,
+    alignSelf: 'left',
+  },
+  commentsView: {
+    fontSize: 16,
+    padding: 4,
+  },
+  commentsAddWrapper: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     alignItems: 'center',
@@ -57,10 +93,10 @@ const styles = StyleSheet.create({
     columnGap: 10,
     paddingTop: 20,
   },
-  comment: {
+  commentsInput: {
     fontSize: 16,
     padding: 4,
-    borderRadius: 4,
+    borderRadius: 2,
     borderWidth: 1,
     borderColor: 'black',
     width: 200,
