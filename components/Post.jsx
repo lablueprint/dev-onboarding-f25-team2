@@ -4,7 +4,7 @@ import { Bookmark, BookmarkCheck } from "lucide-react-native";
 import { useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 
-export default function Post() {
+export default function Post({postTitle, postDescription}) {
   const [liked, setLiked] = useState(false);
   
   const handleOnPress = () => {
@@ -33,6 +33,7 @@ export default function Post() {
       <View style={styles.container}>
           <View style={styles.headerContainer}>
           <Text>This is one post</Text>
+          <Text>{'\n'}{postTitle} {postDescription}</Text>
             {isBookmarked ? (
               <Bookmark onPress={handleBookmark} />
             ) : (
