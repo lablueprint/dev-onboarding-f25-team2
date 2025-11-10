@@ -31,6 +31,15 @@ export default function RootLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="post/post-details"
+        options={{
+          title: 'Post Details',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="star" size={size} color={color} />
+          ),
+        }}
+      />
     </Tabs>
   );
 }
