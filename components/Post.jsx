@@ -1,13 +1,12 @@
 import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
 import { useState } from 'react';
-import Feather from '@expo/vector-icons/Feather';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 export default function Post() {
-  const [saved, setSaved] = useState(false);
+  const [liked, setLiked] = useState(false);
   
   const handleOnPress = () => {
-    setSaved(!saved);
+    setLiked(!liked);
   }
 
   return (
@@ -16,8 +15,8 @@ export default function Post() {
           <View style={styles.headerContainer}>
               <Text>This is one post</Text>
               <Pressable onPress={handleOnPress}>
-              { saved ? <FontAwesome name="bookmark" size={24} color="black"/> 
-                    : <Feather name="bookmark" size={24} color="black"/> }
+              { liked ? <FontAwesome name="heart" size={24} color="black"/> 
+                    : <FontAwesome name="heart-o" size={24} color="black"/> }
               </Pressable>
             </View>
         </View>
