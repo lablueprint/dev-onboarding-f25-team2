@@ -2,6 +2,7 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import { useState } from 'react';
 import { ScrollView, StyleSheet, Text, TextInput, View, Pressable } from 'react-native';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { Bookmark, BookmarkCheck } from "lucide-react-native";
 
 export default function Post() {
   const [liked, setLiked] = useState(false);
@@ -21,15 +22,26 @@ export default function Post() {
     setNewComment('');
   }
   
+  const [isBookmarked, setIsBookmarked] = useState(false);
+
+  const handleBookmark = () => {
+    setIsBookmarked(!isBookmarked);
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <View style={styles.container}>
+      <View style={styles.container}>
           <View style={styles.headerContainer}>
-              <Text>This is one post</Text>
-              <Pressable onPress={handleOnPress}>
-              { liked ? <FontAwesome name="heart" size={24} color="black"/> 
-                    : <FontAwesome name="heart-o" size={24} color="black"/> }
-              </Pressable>
+          <Text>This is one post</Text>
+            {isBookmarked ? (
+              <Bookmark onPress={handleBookmark} />
+            ) : (
+              <BookmarkCheck onPress={handleBookmark} />
+            )}
+            <Pressable onPress={handleOnPress}>
+            { liked ? <FontAwesome name="heart" size={24} color="black"/> 
+                  : <FontAwesome name="heart-o" size={24} color="black"/> }
+            </Pressable>
             </View>
             {allComments && allComments.length > 0 && 
               <>
@@ -67,7 +79,7 @@ export default function Post() {
                 onPress={addComment}
               />
             </View>
-        </View>
+      </View>
     </ScrollView>
   );
 }
@@ -75,10 +87,10 @@ export default function Post() {
 const styles = StyleSheet.create({
   scrollContainer: {
     flexGrow: 1,
-    backgroundColor: '#f9fafb',
+    backgroundColor: "#f9fafb",
   },
   container: {
-    alignItems: 'center',
+    alignItems: "center",
     padding: 20,
     borderRadius: 10,
     borderWidth: 1,
