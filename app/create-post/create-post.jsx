@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { StyleSheet, TextInput, Button, Text, View } from 'react-native';
-import { KeyboardAvoidingView } from "react-native-web";
+import {KeyboardAvoidingView , StyleSheet, TextInput, Button, Text, View } from 'react-native';
+
 
 export default function CreatePost() {
     const [title, setTitle] = useState("");
