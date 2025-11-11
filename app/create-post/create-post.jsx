@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import {KeyboardAvoidingView , StyleSheet, TextInput, Button, Text, View } from 'react-native';
+import {ScrollView , StyleSheet, TextInput, Button, Text, View } from 'react-native';
 
 
 export default function CreatePost() {
@@ -12,7 +12,7 @@ export default function CreatePost() {
     };
 
     return (
-        <KeyboardAvoidingView contentContainerStyle={styles.scrollContainer}>
+        <ScrollView contentContainerStyle={styles.scrollContainer}>
           <View style={styles.container}>
             <Text style={styles.title}>Create Post</Text>
     
@@ -35,7 +35,7 @@ export default function CreatePost() {
               <Button title="Submit" onPress={handleSubmit} />
             </View>
           </View>
-        </KeyboardAvoidingView>
+        </ScrollView>
       );
     }
 
