@@ -1,6 +1,5 @@
 import AntDesign from '@expo/vector-icons/AntDesign';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Bookmark, BookmarkCheck } from "lucide-react-native";
+import { Bookmark, BookmarkCheck, Heart } from "lucide-react-native";
 import { useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 
@@ -32,18 +31,21 @@ export default function Post({postTitle, postDescription}) {
     <ScrollView contentContainerStyle={styles.scrollContainer}>
       <View style={styles.container}>
           <View style={styles.headerContainer}>
-          <Text>This is one post</Text>
-          <Text>{'\n'}{postTitle} {postDescription}</Text>
-            {isBookmarked ? (
-              <Bookmark onPress={handleBookmark} />
-            ) : (
-              <BookmarkCheck onPress={handleBookmark} />
-            )}
-            <Pressable onPress={handleOnPress}>
-            { liked ? <FontAwesome name="heart" size={24} color="black"/> 
-                  : <FontAwesome name="heart-o" size={24} color="black"/> }
-            </Pressable>
+            <Text>This is one post</Text>
+            <View style={styles.buttonContainer}>
+              <Pressable onPress={handleOnPress}>
+              { liked ? <Heart color="red"/> 
+                    : <Heart color="red" fill="red"/> }
+              </Pressable>
+              {isBookmarked ? (
+                <Bookmark onPress={handleBookmark} />
+              ) : (
+                <BookmarkCheck onPress={handleBookmark} />
+              )}
             </View>
+          </View>
+
+          <Text>{'\n'}{postTitle} {postDescription}</Text>
             {allComments && allComments.length > 0 && 
               <>
                 <Text style={styles.commentsViewHeader}>Comments:</Text>
@@ -100,8 +102,13 @@ const styles = StyleSheet.create({
   headerContainer: {
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'space-between',
-    justifyContent: 'center'
+    justifyContent: 'space-between',
+    width: '100%'
+  },
+  buttonContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 10,
   },
   commentsViewContainer: {
     borderWidth: 1,
