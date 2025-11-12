@@ -10,7 +10,11 @@ export default function SignupPage()
     const [confirmPassword, setConfirmPassword] = useState('');
 
     const handleSubmit = () => {
-        console.log("Form Submitted: ", { firstname, lastname, username, password});
+        console.log("Form Submitted!");
+        console.log({firstname});
+        console.log({lastname});
+        console.log({username});
+        console.log({password});
     };
 
     return (
