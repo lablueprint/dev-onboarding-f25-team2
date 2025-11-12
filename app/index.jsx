@@ -1,6 +1,5 @@
-import React from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
+import { Button, StyleSheet, Text, View } from 'react-native';
 
 export default function Landing() {
   const router = useRouter();
@@ -10,6 +9,7 @@ export default function Landing() {
       <Text style={styles.title}>Welcome to Blueprint!</Text>
       <Button title="Go to Example Page" onPress={() => router.push('/example/example')} />
       <Button title="Go to Post Home Page" onPress={() => router.push('/post/home')} />
+      <Button title="Go to Signup Page" onPress={() => router.push('/signup/signup')} />
     </View>
   );
 }
