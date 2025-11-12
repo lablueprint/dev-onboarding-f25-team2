@@ -25,6 +25,7 @@ export default function SignupPage()
                         placeholder="Enter your first name"
                         value={firstname}
                         onChangeText={setFirstname}
+                        placeholderTextColor="#9ca3af"
                     />
                     
                     <Text style={styles.label}>Last Name</Text>
@@ -33,6 +34,7 @@ export default function SignupPage()
                         placeholder="Enter your last name"
                         value={lastname}
                         onChangeText={setLastname}
+                        placeholderTextColor="#9ca3af"
                     />
 
                     <Text style={styles.label}>Username</Text>
@@ -41,6 +43,7 @@ export default function SignupPage()
                         placeholder="Choose a username"
                         value={username}
                         onChangeText={setUsername}
+                        placeholderTextColor="#9ca3af"
                     />
 
                     <Text style={styles.label}>Password</Text>
@@ -49,6 +52,7 @@ export default function SignupPage()
                         placeholder="Create a password"
                         value={password}
                         onChangeText={setPassword}
+                        placeholderTextColor="#9ca3af"
                     />
 
                     <Text style={styles.label}>Confirm Password</Text>
@@ -57,6 +61,7 @@ export default function SignupPage()
                         placeholder="Confirm your password"
                         value={confirmPassword}
                         onChangeText={setConfirmPassword}
+                        placeholderTextColor="#9ca3af"
                     />
 
                     <View style={styles.buttonContainer}>
