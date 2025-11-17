@@ -55,7 +55,7 @@ export default function Post({postTitle, postDescription}) {
                             key={`comment_${id}`}
                             style={[
                               styles.commentsView,
-                              {backgroundColor: id%2==0 ? 'lightgrey' : '#f9fafb'},
+                              {backgroundColor: id%2===0 ? 'lightgrey' : '#f9fafb'},
                             ]}
                           >
                             {comment}
