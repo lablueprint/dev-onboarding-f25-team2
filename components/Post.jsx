@@ -35,7 +35,8 @@ export default function Post({postTitle, postDescription}) {
 
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
-      <View style={styles.container}>
+      <View>
+        <View style={styles.container}>
           <Pressable
             onPress={() =>
               router.push({
@@ -62,48 +63,47 @@ export default function Post({postTitle, postDescription}) {
             { liked ? <Heart onPress={handleOnPress} color="red" fill="red"/> 
                   : <Heart onPress={handleOnPress} color="red"/> }
           </View>
+        </View>
 
+        <Text>{'\n'}{postTitle} {postDescription}</Text>
+        {allComments && allComments.length > 0 && 
+          <>
+            <Text style={styles.commentsViewHeader}>Comments:</Text>
+            <View style={styles.commentsViewContainer}>
+              <ScrollView>
+                  {allComments.map((comment, id) => {
+                    return(
+                      <Text
+                        key={`comment_${id}`}
+                        style={[
+                          styles.commentsView,
+                          {backgroundColor: id%2===0 ? 'lightgrey' : '#f9fafb'},
+                          {backgroundColor: id%2===0 ? 'lightgrey' : '#f9fafb'},
+                        ]}
+                      >
+                        {comment}
+                      </Text>
+                    )
+                  })}
+              </ScrollView>
             </View>
-          </View>
-
-          <Text>{'\n'}{postTitle} {postDescription}</Text>
-            {allComments && allComments.length > 0 && 
-              <>
-                <Text style={styles.commentsViewHeader}>Comments:</Text>
-                <View style={styles.commentsViewContainer}>
-                  <ScrollView>
-                      {allComments.map((comment, id) => {
-                        return(
-                          <Text
-                            key={`comment_${id}`}
-                            style={[
-                              styles.commentsView,
-                              {backgroundColor: id%2===0 ? 'lightgrey' : '#f9fafb'},
-                              {backgroundColor: id%2===0 ? 'lightgrey' : '#f9fafb'},
-                            ]}
-                          >
-                            {comment}
-                          </Text>
-                        )
-                      })}
-                  </ScrollView>
-                </View>
-              </>
-            }
-            <View style={styles.commentsAddWrapper}>
-              <TextInput
-                style={styles.commentsInput}
-                placeholder="Enter a comment"
-                value={newComment}
-                onChangeText={setNewComment}
-              />
-              <AntDesign
-                name="comment"
-                size={20}
-                color="black"
-                onPress={addComment}
-              />
-            </View>
+          </>
+        }
+        <View style={styles.commentsAddWrapper}>
+          <TextInput
+            style={styles.commentsInput}
+            placeholder="Enter a comment"
+            value={newComment}
+            onChangeText={setNewComment}
+          />
+          <AntDesign
+            name="comment"
+            size={20}
+            color="black"
+            onPress={addComment}
+          />
+        </View>
+      </View>
     </ScrollView>
   );
 }
