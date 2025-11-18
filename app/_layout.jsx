@@ -49,6 +49,15 @@ export default function RootLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="signup/signup"
+        options={{
+          title: 'Signup',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="person-circle" size={size} color={color} />
+          ),
+        }}
+      />
     </Tabs>
   );
 }

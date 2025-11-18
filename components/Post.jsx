@@ -6,7 +6,12 @@ import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-
 import { useRouter } from 'expo-router';
 
 
+import { useRouter } from 'expo-router';
+
+
 export default function Post({postTitle, postDescription}) {
+
+  const router = useRouter();
 
   const router = useRouter();
   const [liked, setLiked] = useState(false);
@@ -74,6 +79,7 @@ export default function Post({postTitle, postDescription}) {
                             key={`comment_${id}`}
                             style={[
                               styles.commentsView,
+                              {backgroundColor: id%2===0 ? 'lightgrey' : '#f9fafb'},
                               {backgroundColor: id%2===0 ? 'lightgrey' : '#f9fafb'},
                             ]}
                           >
