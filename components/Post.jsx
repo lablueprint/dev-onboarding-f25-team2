@@ -3,7 +3,13 @@ import { Bookmark, BookmarkCheck, Heart } from "lucide-react-native";
 import { useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 
+import { useRouter } from 'expo-router';
+
+
 export default function Post({postTitle, postDescription}) {
+
+
+  const router = useRouter();
   const [liked, setLiked] = useState(false);
   
   const handleOnPress = () => {
@@ -30,18 +36,33 @@ export default function Post({postTitle, postDescription}) {
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
       <View style={styles.container}>
-          <View style={styles.headerContainer}>
+          <Pressable
+            onPress={() =>
+              router.push({
+                pathname: '/post/post-details',
+                params: {
+                  postTitle: postTitle ?? '',
+                  postDescription: postDescription ?? '',
+                  userName: "Temp User",
+                  timeStamp: "Just now"
+                }
+              })
+            }
+          >
             <Text>This is one post</Text>
-            <View style={styles.buttonContainer}>
-              <Pressable onPress={handleOnPress}>
-              { liked ? <Heart color="red"/> 
-                    : <Heart color="red" fill="red"/> }
-              </Pressable>
-              {isBookmarked ? (
-                <Bookmark onPress={handleBookmark} />
-              ) : (
-                <BookmarkCheck onPress={handleBookmark} />
-              )}
+            <Text>{'\n'}{postTitle} {postDescription}</Text>
+          </Pressable>
+
+          <View style={styles.headerContainer}>
+            {isBookmarked ? (
+              <Bookmark onPress={handleBookmark} />
+            ) : (
+              <BookmarkCheck onPress={handleBookmark} />
+            )}
+            { liked ? <Heart onPress={handleOnPress} color="red" fill="red"/> 
+                  : <Heart onPress={handleOnPress} color="red"/> }
+          </View>
+
             </View>
           </View>
 
@@ -57,7 +78,8 @@ export default function Post({postTitle, postDescription}) {
                             key={`comment_${id}`}
                             style={[
                               styles.commentsView,
-                              {backgroundColor: id%2==0 ? 'lightgrey' : '#f9fafb'},
+                              {backgroundColor: id%2===0 ? 'lightgrey' : '#f9fafb'},
+                              {backgroundColor: id%2===0 ? 'lightgrey' : '#f9fafb'},
                             ]}
                           >
                             {comment}
@@ -82,7 +104,6 @@ export default function Post({postTitle, postDescription}) {
                 onPress={addComment}
               />
             </View>
-      </View>
     </ScrollView>
   );
 }

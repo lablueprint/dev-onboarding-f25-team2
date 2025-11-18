@@ -1,14 +1,31 @@
-import React, { useState } from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Button, ScrollView, StyleSheet, Text, View } from 'react-native';
 
+// NOTE: useLocalSearchParams hook: This hook is used within a screen component to access the parameters specific to that route.
+import { useLocalSearchParams } from 'expo-router';
 
 export default function PostDetails() {
 
-    // Use useState to create a post title, post description, user name, and timestamp state
-    const [postTitle, setPostTitle] = useState();
-    const [postDescription, setPostDescription] = useState();
-    const [userName, setUserName] = useState();
-    const [timeStamp, setTimeStamp] = useState();
+    const params = useLocalSearchParams();
+
+    // REMINDER TO UPDATE LATER!! TEMP VARIABLE FOR CURRENT USERNAME
+    const currentUsername = 'Temp User';
+
+    // Initialize state directly from params 
+    const [postTitle, setPostTitle] = useState(typeof params.postTitle === 'string' ? params.postTitle : '');
+    const [postDescription, setPostDescription] = useState(typeof params.postDescription === 'string' ? params.postDescription : '');
+    const [userName, setUserName] = useState(typeof params.userName === 'string' ? params.userName : '');
+    const [timeStamp, setTimeStamp] = useState(typeof params.timeStamp === 'string' ? params.timeStamp : '');
+
+    useEffect(() => {
+      //updates state when route params change so component re-renders!!!
+      setPostTitle(typeof params.postTitle === 'string' ? params.postTitle : '');
+      setPostDescription(typeof params.postDescription === 'string' ? params.postDescription : '');
+      setUserName(typeof params.userName === 'string' ? params.userName : '');
+      setTimeStamp(typeof params.timeStamp === 'string' ? params.timeStamp : '');
+    }, [params]);
+
+    const isOwner = userName === currentUsername;
 
   return (
 
@@ -18,14 +35,25 @@ export default function PostDetails() {
         {/* Text to display “Post Title, “Post Description”, and “Username” */}
         <Text style={styles.title}>Post Details</Text>
 
-        <Text style={styles.subtitle}>Post Title</Text>
-        <Text>{postTitle}</Text>
+        <Text>Post Title</Text>
+        <Text style={styles.subtitle}>{postTitle}</Text>
 
-        <Text style={styles.subtitle}>Post Description</Text>
-        <Text>{postDescription}</Text>
+        <Text>Post Description</Text>
+        <Text style={styles.subtitle}>{postDescription}</Text>
 
-        <Text style={styles.subtitle}>Username</Text>
-        <Text>{userName}</Text>
+        <Text>Username</Text>
+        <Text style={styles.subtitle}>{userName}</Text>
+
+        <Text>Time Stamp</Text>
+        <Text style={styles.subtitle}>{timeStamp}</Text>
+
+        {isOwner && (
+          <View style={styles.buttonContainer}>
+            <Button title="Delete" onPress={() => console.log('delete')} />
+            <Button title="Edit" onPress={() => console.log('edit')} />
+            <Button title="Save" onPress={() => console.log('save')} />
+          </View>
+        )}
 
         </View>
 
@@ -56,5 +84,9 @@ const styles = StyleSheet.create({
     color: '#6b7280',
     textAlign: 'center',
     marginBottom: 20,
+  }, 
+  buttonContainer: {
+    width: '100%',
+    marginTop: 10,
   },
 });
