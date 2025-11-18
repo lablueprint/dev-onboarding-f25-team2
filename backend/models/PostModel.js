@@ -18,21 +18,11 @@ const postSchema = new Schema({
         default: function() {
             return new mongoose.Types.ObjectId().toString();
         }
+    },
+    likedId: {
+        type: [String],
+        unique: true,
     }
 }, { timestamps: true })
 
-const likedPostSchema = new Schema({
-    userID: {
-        type: String
-    },
-    postId: {
-        type:String,
-        unique: true,
-        default: function() {
-            return new mongoose.Types.ObjectId().toString();
-        }
-    }
-})
-
 module.exports = mongoose.model('Post', postSchema)
-module.exports = mongoose.model('Liked Post', likedPostSchema)
