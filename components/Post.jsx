@@ -1,6 +1,5 @@
 import AntDesign from '@expo/vector-icons/AntDesign';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Bookmark, BookmarkCheck } from "lucide-react-native";
+import { Bookmark, BookmarkCheck, Heart } from "lucide-react-native";
 import { useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 
@@ -8,6 +7,7 @@ import { useRouter } from 'expo-router';
 
 
 export default function Post({postTitle, postDescription}) {
+
 
   const router = useRouter();
   const [liked, setLiked] = useState(false);
@@ -35,9 +35,8 @@ export default function Post({postTitle, postDescription}) {
 
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
-      <View style={styles.container}>
-          <View style={styles.headerContainer}>
-
+      <View>
+        <View style={styles.container}>
           <Pressable
             onPress={() =>
               router.push({
@@ -55,52 +54,55 @@ export default function Post({postTitle, postDescription}) {
             <Text>{'\n'}{postTitle} {postDescription}</Text>
           </Pressable>
 
+          <View style={styles.headerContainer}>
             {isBookmarked ? (
               <Bookmark onPress={handleBookmark} />
             ) : (
               <BookmarkCheck onPress={handleBookmark} />
             )}
-            <Pressable onPress={handleOnPress}>
-            { liked ? <FontAwesome name="heart" size={24} color="black"/> 
-                  : <FontAwesome name="heart-o" size={24} color="black"/> }
-            </Pressable>
+            { liked ? <Heart onPress={handleOnPress} color="red" fill="red"/> 
+                  : <Heart onPress={handleOnPress} color="red"/> }
+          </View>
+        </View>
+
+        <Text>{'\n'}{postTitle} {postDescription}</Text>
+        {allComments && allComments.length > 0 && 
+          <>
+            <Text style={styles.commentsViewHeader}>Comments:</Text>
+            <View style={styles.commentsViewContainer}>
+              <ScrollView>
+                  {allComments.map((comment, id) => {
+                    return(
+                      <Text
+                        key={`comment_${id}`}
+                        style={[
+                          styles.commentsView,
+                          {backgroundColor: id%2===0 ? 'lightgrey' : '#f9fafb'},
+                          {backgroundColor: id%2===0 ? 'lightgrey' : '#f9fafb'},
+                        ]}
+                      >
+                        {comment}
+                      </Text>
+                    )
+                  })}
+              </ScrollView>
             </View>
-            {allComments && allComments.length > 0 && 
-              <>
-                <Text style={styles.commentsViewHeader}>Comments:</Text>
-                <View style={styles.commentsViewContainer}>
-                  <ScrollView>
-                      {allComments.map((comment, id) => {
-                        return(
-                          <Text
-                            key={`comment_${id}`}
-                            style={[
-                              styles.commentsView,
-                              {backgroundColor: id%2===0 ? 'lightgrey' : '#f9fafb'},
-                            ]}
-                          >
-                            {comment}
-                          </Text>
-                        )
-                      })}
-                  </ScrollView>
-                </View>
-              </>
-            }
-            <View style={styles.commentsAddWrapper}>
-              <TextInput
-                style={styles.commentsInput}
-                placeholder="Enter a comment"
-                value={newComment}
-                onChangeText={setNewComment}
-              />
-              <AntDesign
-                name="comment"
-                size={20}
-                color="black"
-                onPress={addComment}
-              />
-            </View>
+          </>
+        }
+        <View style={styles.commentsAddWrapper}>
+          <TextInput
+            style={styles.commentsInput}
+            placeholder="Enter a comment"
+            value={newComment}
+            onChangeText={setNewComment}
+          />
+          <AntDesign
+            name="comment"
+            size={20}
+            color="black"
+            onPress={addComment}
+          />
+        </View>
       </View>
     </ScrollView>
   );
@@ -121,8 +123,13 @@ const styles = StyleSheet.create({
   headerContainer: {
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'space-between',
-    justifyContent: 'center'
+    justifyContent: 'space-between',
+    width: '100%'
+  },
+  buttonContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 10,
   },
   commentsViewContainer: {
     borderWidth: 1,
