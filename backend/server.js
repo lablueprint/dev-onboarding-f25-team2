@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 
 const app = express();
 const postRoutes = require("./routes/posts");
+const profileRoutes = require("./routes/profiles");
 
 app.use(express.json());
 
@@ -15,6 +16,7 @@ app.use((req, res, next) => {
 
 // routes
 app.use("/api/posts", postRoutes);
+app.use("/api/profiles", profileRoutes);
 
 // connect to db
 mongoose

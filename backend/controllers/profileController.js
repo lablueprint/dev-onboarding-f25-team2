@@ -15,30 +15,21 @@ const createProfile = async (req, res) => {
 
 // request is the frontend info, response is what the frontend is getting back
 const getProfile = async (req, res) => {
-  const { username } = req.params;
-
-  if (!mongoose.Types.ObjectId(id).isValid(username)) {
-    return res.status(400).json({ error: "Profile not found" });
-  }
+  const { id } = req.params;
 
   // find the profile and store it into the response
-  const profile = await Profile.findById(username);
+  const profile = await Profile.findOne({ username: id });
   if (!profile) {
     return res.status(400).json({ error: "Profile not found" });
   }
 
-  res.status(200).json(username);
+  res.status(200).json(profile);
 };
 
 const deleteProfile = async (req, res) => {
-  const { username } = req.params;
+  const { id } = req.params;
 
-  if (!mongoose.Types.ObjectId(username).isValid(username)) {
-    return res.status(400).json({ error: "Profile not found" });
-  }
-
-  // attribute to find by username and delete
-  const profile = Profile.findOneAndDelete(username);
+  const profile = await Profile.findOneAndDelete({ username: id });
 
   if (!profile) {
     return res.status(400).json({ error: "Profile not found" });
