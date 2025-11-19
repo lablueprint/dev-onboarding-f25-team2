@@ -1,19 +1,19 @@
 import axios from "axios";
 import { useState } from "react";
 import {
-  Button,
   Image,
   ScrollView,
   StyleSheet,
   Text,
   TextInput,
+  TouchableOpacity,
   View,
 } from "react-native";
 
 const url = "http://localhost:4000";
 
 export default function profilePage() {
-  const [text, setText] = useState("");
+  const [text, setText] = useState("jbruin19");
   const [userData, setUserData] = useState({
     firstName: "Joe",
     lastName: "Bruin",
@@ -21,7 +21,6 @@ export default function profilePage() {
   });
 
   const getProfile = async () => {
-    console.log("I was clicked!");
     try {
       const response = await axios.get(`${url}/api/profiles/${text}`);
       setUserData(response.data);
@@ -35,18 +34,27 @@ export default function profilePage() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text>Profile Page</Text>
+      <Text style={{ fontSize: 30, fontWeight: "bold" }}>
+        {userData.username}
+      </Text>
+      {/* Source only accepts uri object*/}
       <Image
-        source={require("../../assets/images/joebruin.webp")}
+        source={
+          userData.imgURL
+            ? { uri: userData.imgURL }
+            : userData.username == "jbruin19"
+            ? require("../../assets/images/joebruin.webp")
+            : require("../../assets/images/blankprofile.png")
+        }
         style={styles.ProfilePic}
       />
       <View style={styles.Name}>
-        <Text>{userData.firstName}</Text>
+        <Text style={styles.nameText}>{userData.firstName}</Text>
         <Text> </Text>
-        <Text>{userData.lastName}</Text>
+        <Text style={styles.nameText}>{userData.lastName}</Text>
       </View>
-      <Text>{userData.username}</Text>
-      <View>
+
+      <View style={styles.searchbox}>
         <TextInput
           name="userquery"
           style={styles.input}
@@ -54,8 +62,23 @@ export default function profilePage() {
           placeholder="Enter your username"
           value={text}
           autoCapitalize="none"
+          autoCorrect={false}
+          spellCheck={false}
         ></TextInput>
-        <Button title="Search" onPress={() => getProfile()} />
+        <TouchableOpacity
+          onPress={getProfile}
+          style={{
+            backgroundColor: "rgb(39 116 174)",
+            height: 40,
+            justifyContent: "center",
+            alignItems: "center",
+            width: 60,
+            borderRadius: 5,
+            marginLeft: 5,
+          }}
+        >
+          <Text style={{ color: "white" }}>Search</Text>
+        </TouchableOpacity>
       </View>
     </ScrollView>
   );
@@ -63,18 +86,28 @@ export default function profilePage() {
 
 const styles = StyleSheet.create({
   ProfilePic: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    borderWidth: 2,
+    width: 120,
+    height: 120,
+    borderRadius: 120 / 2, // width divided by 2
+    borderWidth: 5,
     borderColor: "rgb(39 116 174)",
+    marginTop: 17,
+    marginBottom: 13,
   },
+  searchbox: {
+    flex: 0,
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: "auto",
+    marginBottom: 20,
+  },
+  nameText: { fontSize: 20, marginBottom: 20 },
   Name: { flexDirection: "row" },
   container: { flex: 1, alignItems: "center", padding: 20 },
   PageHeader: { fontSize: 28 },
   input: {
-    marginTop: 20,
-    width: 200,
+    width: 230,
+    height: 40,
     padding: 5,
     borderWidth: 2,
     borderColor: "rgb(39 116 174)",
