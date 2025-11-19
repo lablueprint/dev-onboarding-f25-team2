@@ -1,31 +1,115 @@
+import axios from "axios";
 import { useState } from "react";
-import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
-const [firstName, setFirstName] = useState("Joe");
-const [lastName, setLastName] = useState("Bruin");
-const [username, setUsername] = useState("jbruin19");
+const url = "http://localhost:4000";
 
 export default function profilePage() {
+  const [text, setText] = useState("jbruin19");
+  const [userData, setUserData] = useState({
+    firstName: "Joe",
+    lastName: "Bruin",
+    username: "jbruin19",
+  });
+
+  const getProfile = async () => {
+    try {
+      const response = await axios.get(`${url}/api/profiles/${text}`);
+      setUserData(response.data);
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      console.log("Error getting profile", error);
+      return null;
+    }
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text>Profile Page</Text>
+      <Text style={{ fontSize: 30, fontWeight: "bold" }}>
+        {userData.username}
+      </Text>
+      {/* Source only accepts uri object*/}
       <Image
-        source={require("../../assets/images/joebruin.webp")}
+        source={
+          userData.imgURL
+            ? { uri: userData.imgURL }
+            : userData.username == "jbruin19"
+            ? require("../../assets/images/joebruin.webp")
+            : require("../../assets/images/blankprofile.png")
+        }
         style={styles.ProfilePic}
       />
       <View style={styles.Name}>
-        <Text>{firstName}</Text>
+        <Text style={styles.nameText}>{userData.firstName}</Text>
         <Text> </Text>
-        <Text>{lastName}</Text>
+        <Text style={styles.nameText}>{userData.lastName}</Text>
       </View>
-      <Text>{username}</Text>
+
+      <View style={styles.searchbox}>
+        <TextInput
+          name="userquery"
+          style={styles.input}
+          onChangeText={setText}
+          placeholder="Enter your username"
+          value={text}
+          autoCapitalize="none"
+          autoCorrect={false}
+          spellCheck={false}
+        ></TextInput>
+        <TouchableOpacity
+          onPress={getProfile}
+          style={{
+            backgroundColor: "rgb(39 116 174)",
+            height: 40,
+            justifyContent: "center",
+            alignItems: "center",
+            width: 60,
+            borderRadius: 5,
+            marginLeft: 5,
+          }}
+        >
+          <Text style={{ color: "white" }}>Search</Text>
+        </TouchableOpacity>
+      </View>
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  ProfilePic: { width: 100, height: 100 },
+  ProfilePic: {
+    width: 120,
+    height: 120,
+    borderRadius: 120 / 2, // width divided by 2
+    borderWidth: 5,
+    borderColor: "rgb(39 116 174)",
+    marginTop: 17,
+    marginBottom: 13,
+  },
+  searchbox: {
+    flex: 0,
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: "auto",
+    marginBottom: 20,
+  },
+  nameText: { fontSize: 20, marginBottom: 20 },
   Name: { flexDirection: "row" },
   container: { flex: 1, alignItems: "center", padding: 20 },
   PageHeader: { fontSize: 28 },
+  input: {
+    width: 230,
+    height: 40,
+    padding: 5,
+    borderWidth: 2,
+    borderColor: "rgb(39 116 174)",
+  },
 });
