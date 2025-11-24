@@ -11,9 +11,10 @@ import {
 } from "react-native";
 
 const url = "http://localhost:4000";
+const profileID = "691be86d4ec892b242608c20"; // needs to be connected to log in
 
 export default function profilePage() {
-  const [usernameInput, setUsernameInput] = useState("jbruin19");
+  const [usernameInput, setUsernameInput] = useState("");
   const [firstNameInput, setFirstNameInput] = useState("");
   const [lastNameInput, setLastNameInput] = useState("");
 
@@ -22,7 +23,7 @@ export default function profilePage() {
 
   useEffect(() => {
     getProfile();
-  }, []); // run once on mount
+  }, []); // only runs again if any of the dependencies change, but there are no dependencies
 
   const editProfile = async () => {
     try {
@@ -48,7 +49,7 @@ export default function profilePage() {
 
   const getProfile = async () => {
     try {
-      const response = await axios.get(`${url}/api/profiles/${usernameInput}`);
+      const response = await axios.get(`${url}/api/profiles/id/${profileID}`);
       setUserData(response.data);
       console.log(response.data);
       return response.data;
