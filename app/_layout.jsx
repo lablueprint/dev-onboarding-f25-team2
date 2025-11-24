@@ -58,6 +58,16 @@ export default function RootLayout() {
           ),
         }}
       />
+
+      <Tabs.Screen
+        name="liked-posts/liked-posts"
+        options={{
+          title: 'Liked Posts',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="heart" size={size} color={color} />
+          ),
+        }}
+      />
     </Tabs>
   );
 }
