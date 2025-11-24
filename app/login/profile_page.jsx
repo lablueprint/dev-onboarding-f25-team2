@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Image,
   ScrollView,
@@ -14,11 +14,12 @@ const url = "http://localhost:4000";
 
 export default function profilePage() {
   const [text, setText] = useState("jbruin19");
-  const [userData, setUserData] = useState({
-    firstName: "Joe",
-    lastName: "Bruin",
-    username: "jbruin19",
-  });
+  const [userData, setUserData] = useState({});
+  const [editMode, setEditMode] = useState(false);
+
+  useEffect(() => {
+    getProfile();
+  }, []); // only runs again if any of the dependencies change, but there are none
 
   const getProfile = async () => {
     try {
@@ -34,16 +35,18 @@ export default function profilePage() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={{ fontSize: 30, fontWeight: "bold" }}>
-        {userData.username}
-      </Text>
+      {editMode ? (
+        <TextInput></TextInput>
+      ) : (
+        <Text style={{ fontSize: 30, fontWeight: "bold" }}>
+          {userData.username}
+        </Text>
+      )}
       {/* Source only accepts uri object*/}
       <Image
         source={
           userData.imgURL
             ? { uri: userData.imgURL }
-            : userData.username == "jbruin19"
-            ? require("../../assets/images/joebruin.webp")
             : require("../../assets/images/blankprofile.png")
         }
         style={styles.ProfilePic}
