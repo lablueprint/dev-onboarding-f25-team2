@@ -6,7 +6,7 @@ import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-
 import { useRouter } from 'expo-router';
 
 
-export default function Post({postTitle, postDescription}) {
+export default function Post({postTitle, postDescription, postId, userName, timeStamp, currentUsername}) {
 
 
   const router = useRouter();
@@ -44,8 +44,10 @@ export default function Post({postTitle, postDescription}) {
                 params: {
                   postTitle: postTitle ?? '',
                   postDescription: postDescription ?? '',
-                  userName: "Temp User",
-                  timeStamp: "Just now"
+                  userName: userName ?? '',
+                  timeStamp: timeStamp ?? '',
+                  postId: postId ?? '',
+                  currentUsername: currentUsername ?? 'Temp User'
                 }
               })
             }
