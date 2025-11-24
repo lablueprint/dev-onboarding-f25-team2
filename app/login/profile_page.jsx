@@ -13,17 +13,42 @@ import {
 const url = "http://localhost:4000";
 
 export default function profilePage() {
-  const [text, setText] = useState("jbruin19");
+  const [usernameInput, setUsernameInput] = useState("jbruin19");
+  const [firstNameInput, setFirstNameInput] = useState("");
+  const [lastNameInput, setLastNameInput] = useState("");
+
   const [userData, setUserData] = useState({});
   const [editMode, setEditMode] = useState(false);
 
   useEffect(() => {
     getProfile();
-  }, []); // only runs again if any of the dependencies change, but there are none
+  }, []); // run once on mount
+
+  const editProfile = async () => {
+    try {
+      // build payload, falling back to existing userData values when an input is blank
+      const payload = {
+        username: usernameInput || userData.username,
+        firstName: firstNameInput || userData.firstName,
+        lastName: lastNameInput || userData.lastName,
+      };
+
+      const response = await axios.post(
+        `${url}/api/profiles/${userData.username}`,
+        payload
+      );
+      setUserData(response.data);
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      console.log("Error editing profile", error);
+      return null;
+    }
+  };
 
   const getProfile = async () => {
     try {
-      const response = await axios.get(`${url}/api/profiles/${text}`);
+      const response = await axios.get(`${url}/api/profiles/${usernameInput}`);
       setUserData(response.data);
       console.log(response.data);
       return response.data;
@@ -36,12 +61,30 @@ export default function profilePage() {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       {editMode ? (
-        <TextInput></TextInput>
+        <TextInput
+          style={{
+            fontSize: 30,
+            fontWeight: "bold",
+            height: 50,
+            width: 245,
+            paddingTop: 5,
+            paddingBottom: 5,
+            paddingLeft: 10,
+            paddingRight: 5,
+            borderWidth: 2,
+            borderColor: "rgb(39 116 174)",
+            borderRadius: 10,
+          }}
+          placeholder={"Enter username"}
+          defaultValue={userData.username}
+          onChangeText={setUsernameInput}
+        />
       ) : (
         <Text style={{ fontSize: 30, fontWeight: "bold" }}>
           {userData.username}
         </Text>
       )}
+
       {/* Source only accepts uri object*/}
       <Image
         source={
@@ -51,37 +94,82 @@ export default function profilePage() {
         }
         style={styles.ProfilePic}
       />
-      <View style={styles.Name}>
-        <Text style={styles.nameText}>{userData.firstName}</Text>
-        <Text> </Text>
-        <Text style={styles.nameText}>{userData.lastName}</Text>
-      </View>
+
+      {editMode ? (
+        <View style={styles.Name}>
+          <TextInput
+            style={{
+              fontSize: 20,
+              height: 40,
+              width: 160,
+              padding: 5,
+              borderWidth: 2,
+              borderColor: "rgb(39 116 174)",
+              marginRight: 10,
+              borderRadius: 10,
+            }}
+            placeholder={"Enter first name"}
+            defaultValue={userData.firstName}
+            onChangeText={setFirstNameInput}
+          />
+          <TextInput
+            style={{
+              fontSize: 20,
+              height: 40,
+              width: 160,
+              padding: 5,
+              borderWidth: 2,
+              borderColor: "rgb(39 116 174)",
+              borderRadius: 10,
+            }}
+            placeholder={"Enter last name"}
+            defaultValue={userData.lastName}
+            onChangeText={setLastNameInput}
+          />
+        </View>
+      ) : (
+        <View style={styles.Name}>
+          <Text style={styles.nameText}>{userData.firstName}</Text>
+          <Text> </Text>
+          <Text style={styles.nameText}>{userData.lastName}</Text>
+        </View>
+      )}
 
       <View style={styles.searchbox}>
-        <TextInput
-          name="userquery"
-          style={styles.input}
-          onChangeText={setText}
-          placeholder="Enter your username"
-          value={text}
-          autoCapitalize="none"
-          autoCorrect={false}
-          spellCheck={false}
-        ></TextInput>
-        <TouchableOpacity
-          onPress={getProfile}
-          style={{
-            backgroundColor: "rgb(39 116 174)",
-            height: 40,
-            justifyContent: "center",
-            alignItems: "center",
-            width: 60,
-            borderRadius: 5,
-            marginLeft: 5,
-          }}
-        >
-          <Text style={{ color: "white" }}>Search</Text>
-        </TouchableOpacity>
+        {editMode ? (
+          <TouchableOpacity
+            onPress={async () => {
+              await editProfile();
+              setEditMode(false);
+            }}
+            style={{
+              backgroundColor: "rgb(39 116 174)",
+              height: 40,
+              justifyContent: "center",
+              alignItems: "center",
+              width: 60,
+              borderRadius: 5,
+              marginLeft: 5,
+            }}
+          >
+            <Text style={{ color: "white" }}>Save</Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            onPress={() => setEditMode(true)}
+            style={{
+              backgroundColor: "rgb(39 116 174)",
+              height: 40,
+              justifyContent: "center",
+              alignItems: "center",
+              width: 60,
+              borderRadius: 5,
+              marginLeft: 5,
+            }}
+          >
+            <Text style={{ color: "white" }}>Edit</Text>
+          </TouchableOpacity>
+        )}
       </View>
     </ScrollView>
   );

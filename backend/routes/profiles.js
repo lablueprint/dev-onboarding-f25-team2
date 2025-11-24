@@ -3,6 +3,8 @@ const {
   getProfile,
   createProfile,
   deleteProfile,
+  editProfile,
+  getProfileByID,
 } = require("../controllers/profileController");
 
 const router = express.Router();
@@ -11,5 +13,7 @@ const router = express.Router();
 router.get("/:id", getProfile);
 router.post("/", createProfile);
 router.delete("/:id", deleteProfile);
+router.post("/:id", editProfile);
+router.get("/id/:id", getProfileByID);
 
 module.exports = router;
