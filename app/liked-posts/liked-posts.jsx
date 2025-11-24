@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, Text, View} from 'react-native';
+import { ScrollView, StyleSheet, View} from 'react-native';
 import { useEffect, useState } from "react";
 import Post from "../../components/Post";
 import axios from 'axios';
