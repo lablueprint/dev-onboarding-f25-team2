@@ -5,6 +5,8 @@ import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-
 import { useRouter } from 'expo-router';
 import axios from 'axios';
 
+export default function Post({postTitle, postDescription, postId, userName, timeStamp, currentUsername}) {
+
 export default function Post({postTitle, postDescription}) {
   const url = 'http://localhost:4000'
 
@@ -62,8 +64,10 @@ export default function Post({postTitle, postDescription}) {
                 params: {
                   postTitle: postTitle ?? '',
                   postDescription: postDescription ?? '',
-                  userName: "Temp User",
-                  timeStamp: "Just now"
+                  userName: userName ?? '',
+                  timeStamp: timeStamp ?? '',
+                  postId: postId ?? '',
+                  currentUsername: currentUsername ?? 'Temp User'
                 }
               })
             }

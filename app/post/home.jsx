@@ -1,23 +1,31 @@
+import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import Post from '../../components/Post';
 
 export default function PostHome() {
-  // example posts for retrieval
-  const posts = [
-    { id: 1, title: "e.g. First hardcode post", description: "This is the description of the first post (hardcoded e.g.)."},
-    { id: 2, title: "e.g. Second hardcode post", description: "This is the description of the second post (hardcoded e.g.)."},
-  ]; 
+  const [posts, setPosts] = useState([]);
+  useEffect(() => {
+    async function fetchPosts() {
+      const response = await fetch('http://localhost:4000/api/posts');
+      const result = await response.json();
+      setPosts(result);
+    }
+
+    fetchPosts();
+  }, []);
 
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.container}>
             <Text>Post Home Page</Text>
-
             {posts.map((post) => (
               <Post
-                key={post.id}
+                key={post._id}
                 postTitle={post.title}
                 postDescription={post.description}
+                postId={post._id}
+                userName={'Temp User'}
+                timeStamp={post.createdAt}
               />
             ))}
         </View>
