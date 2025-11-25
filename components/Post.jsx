@@ -1,7 +1,7 @@
 import AntDesign from "@expo/vector-icons/AntDesign";
 import axios from "axios";
 import { Bookmark, BookmarkCheck, Heart } from "lucide-react-native";
-import { useState, useEffect } from "react";
+import { useCallback, useState, useEffect } from "react";
 import {
   Pressable,
   ScrollView,
@@ -56,7 +56,40 @@ export default function Post({
     } else {
       await axios.post(`${url}/api/likedPosts/likePost`, likeData);
     }
+  const [isBookmarked, setIsBookmarked] = useState(false);
+
+  // Function to check if post is saved
+  const checkIfSaved = useCallback(async () => {
+    if (!postId) {
+      console.log("Early return: postId is missing");
+      return;
+    }
+    // Use fallback if currentUsername is not provided
+    const username = currentUsername ?? "Temp User";
+    try {
+      const response = await axios.get(`${url}/api/saves/${username}`);
+      const savedPosts = response.data;
+      // Check if current post is in the saved posts list
+      const isSaved = savedPosts.some(
+        (save) => save.postID?._id === postId || save.postID === postId
+      );
+      setIsBookmarked(isSaved);
+    } catch (error) {
+      console.error("Error checking if post is saved:", error);
+      // Default to false on error
+      setIsBookmarked(false);
+    }
+  }, [postId, currentUsername]);
+
+  // Check if post is saved when component mounts
+  useEffect(() => {
+    checkIfSaved();
+  }, [checkIfSaved]);
+
+  const handleOnPress = async () => {
     setLiked(!liked);
+    // Re-check saved state after toggling like button
+    await checkIfSaved();
   };
 
   const [newComment, setNewComment] = useState("");
@@ -69,8 +102,6 @@ export default function Post({
     setAllComments([...allComments, newComment]);
     setNewComment("");
   };
-
-  const [isBookmarked, setIsBookmarked] = useState(false);
 
   const handleBookmark = async () => {
     const previousState = isBookmarked;
@@ -95,10 +126,32 @@ export default function Post({
           },
         });
       }
+      // Re-check saved state after successful toggle
+      await checkIfSaved();
     } catch (error) {
       // Revert UI state on error
       setIsBookmarked(previousState);
-      console.error("Error saving/unsaving post:", error);
+
+      // Log detailed error information
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        console.error("Error saving/unsaving post:", {
+          status: error.response.status,
+          statusText: error.response.statusText,
+          errorMessage: error.response.data?.error || error.response.data,
+          data: error.response.data,
+        });
+      } else if (error.request) {
+        // The request was made but no response was received
+        console.error(
+          "Error saving/unsaving post: No response received",
+          error.request
+        );
+      } else {
+        // Something happened in setting up the request
+        console.error("Error saving/unsaving post:", error.message);
+      }
     }
   };
 
