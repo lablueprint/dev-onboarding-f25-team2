@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import Post from '../../components/Post';
 
@@ -23,6 +23,7 @@ export default function PostHome() {
                 key={post._id}
                 postTitle={post.title}
                 postDescription={post.description}
+                postComments={post.comments}
               />
             ))}
         </View>

@@ -4,9 +4,10 @@ const Schema = mongoose.Schema;
 
 const commentSchema = new Schema(
     {
-        comment: { // text content of the comment
+        commentText: { // text content of the comment
             type: String,
             trim: true,
+            required: true,
             default: '',
         },
         userID: { // user who created the comment

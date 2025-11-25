@@ -1,13 +1,11 @@
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { Bookmark, BookmarkCheck, Heart } from "lucide-react-native";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { useRouter } from 'expo-router';
 
-
-export default function Post({postTitle, postDescription}) {
-
+export default function Post({postTitle, postDescription, postComments}) {
 
   const router = useRouter();
   const [liked, setLiked] = useState(false);
@@ -18,13 +16,18 @@ export default function Post({postTitle, postDescription}) {
 
   const [newComment, setNewComment] = useState('');
   const [allComments, setAllComments] = useState([]);
-
+  useEffect(() => { // TODO: Placeholder since old documents do not support new Post schema containing the comments field.
+    if(postComments)
+      setAllComments(postComments.map((item, _) => item.commentText));
+  },[postComments])
+  
   const addComment = () => {
     if(newComment === ''){
       return;
     }
     setAllComments([...allComments, newComment]);
     setNewComment('');
+    // TODO: POST request for comments
   }
   
   const [isBookmarked, setIsBookmarked] = useState(false);
