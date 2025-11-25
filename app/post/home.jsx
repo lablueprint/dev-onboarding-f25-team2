@@ -23,6 +23,9 @@ export default function PostHome() {
                 key={post._id}
                 postTitle={post.title}
                 postDescription={post.description}
+                postId={post._id}
+                userName={'Temp User'}
+                timeStamp={post.createdAt}
               />
             ))}
         </View>
