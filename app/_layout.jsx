@@ -32,6 +32,15 @@ export default function RootLayout() {
         }}
       />
       <Tabs.Screen
+        name="saved/saved"
+        options={{
+          title: "Saved",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="bookmark" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
         name="login/profile_page"
         options={{
           title: "Profile",
@@ -43,7 +52,7 @@ export default function RootLayout() {
       <Tabs.Screen
         name="post/post-details"
         options={{
-          title: 'Post Details',
+          title: "Post Details",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="star" size={size} color={color} />
           ),
@@ -52,7 +61,7 @@ export default function RootLayout() {
       <Tabs.Screen
         name="signup/signup"
         options={{
-          title: 'Signup',
+          title: "Signup",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="person-circle" size={size} color={color} />
           ),
