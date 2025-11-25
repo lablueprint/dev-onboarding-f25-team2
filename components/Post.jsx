@@ -6,8 +6,6 @@ import { useRouter } from 'expo-router';
 import axios from 'axios';
 
 export default function Post({postTitle, postDescription, postId, userName, timeStamp, currentUsername}) {
-
-export default function Post({postTitle, postDescription}) {
   const url = 'http://localhost:4000'
 
   const router = useRouter();
