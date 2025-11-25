@@ -1,6 +1,6 @@
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { Bookmark, BookmarkCheck, Heart } from "lucide-react-native";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import axios from 'axios';
@@ -11,25 +11,33 @@ export default function Post({postTitle, postDescription, postId, userName, time
   const router = useRouter();
   const [liked, setLiked] = useState(false);
   
+  useEffect(() => {
+    const checkIsLiked = async () => {
+      try {
+        await axios.get(`${url}/api/likedPosts/isLiked/${postId}`);
+        setLiked(true);
+      } catch {
+        setLiked(false);
+      }
+    }
+    checkIsLiked();
+  }, [liked, postId]);
+
   const handleLike = async () => {
-    const userId = 1; // HARD CODED USER ID
     const likeData = {
+      "postId": postId,
       "title": postTitle,
       "description": postDescription,
-      "userId": userId
     }
 
     const unlikeData = {
-      "title": postTitle,
-      "userId": userId
+      "postId": postId
     }
 
     if(liked) {
       await axios.post(`${url}/api/likedPosts/unlikePost`, unlikeData);
-      console.log("Post is unliked.");
     } else {
       await axios.post(`${url}/api/likedPosts/likePost`, likeData);
-      console.log("Post is liked");
     }
     setLiked(!liked);
   }

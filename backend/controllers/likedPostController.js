@@ -1,26 +1,19 @@
 const LikedPost2 = require('../models/LikedPostModel');
 
 const likePost = async (req, res) => {
-    const { title, description, userId } = req.body;
+    const { postId, title, description } = req.body;
     
     try {
         // See if this post exists in DB
-        let likedPost = await LikedPost2.findOne({ title });
+        let likedPost = await LikedPost2.findOne({ postId });
 
         if(!likedPost) {
-            // This post has never been liked yet
-            // Create in database
             const response = await LikedPost2.create({
-                title, description, userId: [userId]
+                postId, title, description
             });
             return res.status(200).json({ message: 'Post liked successfully. New document created.', response});
         } else {
-            // This post has been liked before
-            // Add current userId to the array
-            const response = await LikedPost2.findOneAndUpdate(
-                { title }, { $addToSet: { userId } }, {new: true}
-            )
-            return res.status(200).json({ message: 'Post liked successfully.', response});
+            return res.status(200).json({ message: 'Post liked successfully.'});
         }
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -28,13 +21,11 @@ const likePost = async (req, res) => {
 }
 
 const unlikePost = async (req, res) => {
-    const { title, userId } = req.body;
+    const { postId } = req.body;
 
     try {
-        await LikedPost2.findOne({ title });
-        await LikedPost2.findOneAndUpdate(
-            {title}, { $pull: { userId: userId }}, {new: true}
-        )
+        await LikedPost2.findOne({ postId });
+        await LikedPost2.findOneAndDelete({ postId })
         return res.status(200).json({ message: 'Post unliked successfully.' });
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -42,22 +33,29 @@ const unlikePost = async (req, res) => {
 }
 
 const getLikedPosts = async (req, res) => {
-    const {id: userId} = req.params;
-    console.log("Querying with ID:", userId, "Type:", typeof userId);
-
-    if(!userId) {
-        return res.status(401).json({ error: 'User is not authenticated'} );
-    }
-
     try {
         // Find all posts where userId is included in userId array
-        const likedPosts = await LikedPost2.find({ userId: userId }).sort({ createdAt: -1 })
+        const likedPosts = await LikedPost2.find();
         res.status(200).json(likedPosts);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 }
 
+const isLiked = async (req, res) => {
+    const {id: postId} = req.params;
+
+    try {
+        const post = await LikedPost2.exists({ postId });
+        if (post) 
+            res.status(200).json({ isLiked: true, message: "Post found" });
+        else
+            res.status(401).json({ isLiked: false, message: "Post not found" });
+    } catch {
+        res.status(500).json({ message: "Post not found" });
+    }
+}
+
 module.exports = {
-    likePost, unlikePost, getLikedPosts
+    likePost, unlikePost, getLikedPosts, isLiked
 };

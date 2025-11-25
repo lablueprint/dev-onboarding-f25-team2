@@ -3,15 +3,15 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const likedPostSchema = new Schema({
-    title: {
+    postId: {
         type: String,
         unique: true,
     },
+    title: {
+        type: String,
+    },
     description: {
         type: String
-    },
-    userId: {
-        type: [String]
     }
 }, { timestamps: true })
 

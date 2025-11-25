@@ -1,26 +1,38 @@
 import { ScrollView, StyleSheet, View} from 'react-native';
-import { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
+import { useFocusEffect } from '@react-navigation/native';
 import Post from "../../components/Post";
 import axios from 'axios';
 
 export default function LikedPosts() {
     const [likedPosts, setLikedPosts] = useState([]);
     const url = 'http://localhost:4000'
-    const userId = 1;
 
-    useEffect(() => {
+    useFocusEffect(
+      React.useCallback(() => {
+        let isActive = true;
+
         async function loadLikedPosts() {
           try {
-            const response = await axios.get(`${url}/api/likedPosts/getLikedPosts/${userId}`)
-            setLikedPosts(response.data);
-            console.log(response.data);
+            const response = await axios.get(`${url}/api/likedPosts/getLikedPosts`)
+
+            if (isActive) {
+              setLikedPosts(response.data);
+            }
           } catch {
-            setLikedPosts([]);
-            console.log("No liked posts to display");
+            if (isActive) {
+              setLikedPosts([]);
+            }
           }
         }
         loadLikedPosts();
-    }, []);
+
+        return () => {
+          isActive = false;
+        };
+      }, [])
+    );
+
     
     return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -31,6 +43,10 @@ export default function LikedPosts() {
                     key={post.title}
                     postTitle={post.title}
                     postDescription={post.description}
+                    postId={post.postId}
+                    userName=''
+                    timeStamp=''
+                    currentUsername='Temp User'
                   />          
             ))
         }
