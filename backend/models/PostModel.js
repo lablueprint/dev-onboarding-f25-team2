@@ -18,10 +18,6 @@ const postSchema = new Schema({
         default: function() {
             return new mongoose.Types.ObjectId().toString();
         }
-    },
-    likedId: {
-        type: [String],
-        unique: true,
     }
 }, { timestamps: true })
 

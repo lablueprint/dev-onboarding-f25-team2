@@ -1,18 +1,44 @@
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { Bookmark, BookmarkCheck, Heart } from "lucide-react-native";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
-
 import { useRouter } from 'expo-router';
-
+import axios from 'axios';
 
 export default function Post({postTitle, postDescription, postId, userName, timeStamp, currentUsername}) {
-
+  const url = 'http://localhost:4000'
 
   const router = useRouter();
   const [liked, setLiked] = useState(false);
   
-  const handleOnPress = () => {
+  useEffect(() => {
+    const checkIsLiked = async () => {
+      try {
+        await axios.get(`${url}/api/likedPosts/isLiked/${postId}`);
+        setLiked(true);
+      } catch {
+        setLiked(false);
+      }
+    }
+    checkIsLiked();
+  }, [liked, postId]);
+
+  const handleLike = async () => {
+    const likeData = {
+      "postId": postId,
+      "title": postTitle,
+      "description": postDescription,
+    }
+
+    const unlikeData = {
+      "postId": postId
+    }
+
+    if(liked) {
+      await axios.post(`${url}/api/likedPosts/unlikePost`, unlikeData);
+    } else {
+      await axios.post(`${url}/api/likedPosts/likePost`, likeData);
+    }
     setLiked(!liked);
   }
 
@@ -62,8 +88,8 @@ export default function Post({postTitle, postDescription, postId, userName, time
             ) : (
               <BookmarkCheck onPress={handleBookmark} />
             )}
-            { liked ? <Heart onPress={handleOnPress} color="red" fill="red"/> 
-                  : <Heart onPress={handleOnPress} color="red"/> }
+            { liked ? <Heart onPress={handleLike} color="red" fill="red"/> 
+                  : <Heart onPress={handleLike} color="red"/> }
           </View>
         </View>
 
