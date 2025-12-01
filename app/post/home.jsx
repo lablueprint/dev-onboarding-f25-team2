@@ -17,17 +17,19 @@ export default function PostHome() {
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
       <View style={styles.container}>
-        <Text>Post Home Page</Text>
-        {posts.map((post) => (
-          <Post
-            key={post._id}
-            postTitle={post.title}
-            postDescription={post.description}
-            postId={post._id}
-            currentUsername={"Temp User"}
-            timeStamp={post.createdAt}
-          />
-        ))}
+        <Text style={styles.title}>Post Home Page</Text>
+        <View>
+          {posts.map((post) => (
+            <Post
+              key={post._id}
+              postTitle={post.title}
+              postDescription={post.description}
+              postId={post._id}
+              currentUsername={"Temp User"}
+              timeStamp={post.createdAt}
+            />
+          ))}
+        </View>
       </View>
     </ScrollView>
   );
@@ -42,5 +44,12 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     padding: 20,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: '700',
+    marginBottom: 20,
+    color: '#111827',
+    textAlign: 'center',
   },
 });
