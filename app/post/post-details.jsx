@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Alert, Button, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Alert, Button, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 
 // NOTE: useLocalSearchParams hook: This hook is used within a screen component to access the parameters specific to that route.
 import { useLocalSearchParams, useRouter } from 'expo-router';
+
+const API_URL = 'http://localhost:4000/api/posts';
 
 export default function PostDetails() {
 
@@ -19,16 +21,80 @@ export default function PostDetails() {
     const [timeStamp, setTimeStamp] = useState(typeof params.timeStamp === 'string' ? params.timeStamp : '');
     const [postId, setPostId] = useState(typeof params.postId === 'string' ? params.postId : '');
 
+    const [isEditing, setIsEditing] = useState(false);
+    const [editTitle, setEditTitle] = useState('');
+    const [editDescription, setEditDescription] = useState('');
+
     useEffect(() => {
-      //updates state when route params change so component re-renders!!!
-      setPostTitle(typeof params.postTitle === 'string' ? params.postTitle : '');
-      setPostDescription(typeof params.postDescription === 'string' ? params.postDescription : '');
-      setUserName(typeof params.userName === 'string' ? params.userName : '');
-      setTimeStamp(typeof params.timeStamp === 'string' ? params.timeStamp : '');
-      setPostId(typeof params.postId === 'string' ? params.postId : '');
-    }, [params]);
+      // Only update state if the post ID changes to avoid overwriting user edits on re-renders
+      if (params.postId && params.postId !== postId) {
+        setPostTitle(typeof params.postTitle === 'string' ? params.postTitle : '');
+        setPostDescription(typeof params.postDescription === 'string' ? params.postDescription : '');
+        setUserName(typeof params.userName === 'string' ? params.userName : '');
+        setTimeStamp(typeof params.timeStamp === 'string' ? params.timeStamp : '');
+        setPostId(typeof params.postId === 'string' ? params.postId : '');
+        
+        setEditTitle(typeof params.postTitle === 'string' ? params.postTitle : '');
+        setEditDescription(typeof params.postDescription === 'string' ? params.postDescription : '');
+      }
+    }, [params, postId]);
 
     const isOwner = userName === currentUsername;
+
+    const handleEdit = () => {
+        setIsEditing(true);
+        setEditTitle(postTitle);
+        setEditDescription(postDescription);
+    };
+
+    const handleCancelEdit = () => {
+        setIsEditing(false);
+        setEditTitle(postTitle);
+        setEditDescription(postDescription);
+    };
+
+    const handleSave = async () => {
+        if (!postId) {
+            Alert.alert('Error', 'Missing post ID.');
+            return;
+        }
+
+        try {
+            const response = await fetch(`${API_URL}/${postId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    title: editTitle,
+                    description: editDescription,
+                }),
+            });
+
+            if (response.ok) {
+                setPostTitle(editTitle);
+                setPostDescription(editDescription);
+                setIsEditing(false);
+                Alert.alert('Success', 'Post updated successfully!');
+                return;
+            }
+
+            // Non-OK responses: optionally parse JSON error or fallback to text
+            const contentType = response.headers.get('content-type') || '';
+            if (contentType.includes('application/json')) {
+                const json = await response.json();
+                Alert.alert('Error', json.error || 'Failed to update post');
+            } else {
+                const text = await response.text();
+                Alert.alert(
+                    'Error',
+                    `Failed to update post (Status: ${response.status}). Response: ${text}`,
+                );
+            }
+        } catch (error) {
+            Alert.alert('Error', 'Something went wrong');
+        }
+    };
 
     const handleDelete = () => {
       if (!postId) {
@@ -46,7 +112,7 @@ export default function PostDetails() {
             style: 'destructive',
             onPress: async () => {
               try {
-                const res = await fetch(`http://localhost:4000/api/posts/${postId}`, {
+                const res = await fetch(`${API_URL}/${postId}`, {
                   method: 'DELETE',
                 });
 
@@ -93,10 +159,27 @@ export default function PostDetails() {
         <Text style={styles.title}>Post Details</Text>
 
         <Text>Post Title</Text>
-        <Text style={styles.subtitle}>{postTitle}</Text>
+        {isEditing ? (
+            <TextInput
+                style={styles.input}
+                value={editTitle}
+                onChangeText={setEditTitle}
+            />
+        ) : (
+            <Text style={styles.subtitle}>{postTitle}</Text>
+        )}
 
         <Text>Post Description</Text>
-        <Text style={styles.subtitle}>{postDescription}</Text>
+        {isEditing ? (
+            <TextInput
+                style={[styles.input, { height: 100, textAlignVertical: 'top' }]}
+                value={editDescription}
+                onChangeText={setEditDescription}
+                multiline
+            />
+        ) : (
+            <Text style={styles.subtitle}>{postDescription}</Text>
+        )}
 
         <Text>Username</Text>
         <Text style={styles.subtitle}>{userName}</Text>
@@ -107,8 +190,14 @@ export default function PostDetails() {
         {isOwner && (
           <View style={styles.buttonContainer}>
             <Button title="Delete" onPress={handleDelete} />
-            <Button title="Edit" onPress={() => console.log('edit')} />
-            <Button title="Save" onPress={() => console.log('save')} />
+            {isEditing ? (
+                <>
+                    <Button title="Save" onPress={handleSave} />
+                    <Button title="Cancel" onPress={handleCancelEdit} color="red" />
+                </>
+            ) : (
+                <Button title="Edit" onPress={handleEdit} />
+            )}
           </View>
         )}
 
@@ -142,6 +231,18 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 20,
   }, 
+  input: {
+    fontSize: 16,
+    color: '#000',
+    textAlign: 'left',
+    marginBottom: 20,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    padding: 10,
+    width: '100%',
+    borderRadius: 5,
+    backgroundColor: '#fff',
+  },
   buttonContainer: {
     width: '100%',
     marginTop: 10,

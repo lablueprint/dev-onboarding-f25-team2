@@ -24,7 +24,7 @@ export default function PostHome() {
                 postTitle={post.title}
                 postDescription={post.description}
                 postId={post._id}
-                userName={'Temp User'}
+                userName={post.userID || 'Temp User'} // Use post.userID, but like have fallback
                 timeStamp={post.createdAt}
               />
             ))}
