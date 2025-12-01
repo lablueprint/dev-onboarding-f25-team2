@@ -173,11 +173,10 @@ export default function Post({
               })
             }
           >
-            <Text>
-              {"\n"}
-              {postTitle}
-              {"\n"}
-              {postDescription}
+            <Text style={styles.description}>
+              <b>Title: </b>{postTitle}
+              {"\n\n"}
+              <div style={styles.details}>{postDescription}</div>
             </Text>
           </Pressable>
 
@@ -254,6 +253,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 1,
     borderColor: "black",
+    margin: 10,
   },
   headerContainer: {
     display: "flex",
@@ -296,5 +296,16 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "black",
     width: 200,
+  },
+  description: {
+    textAlign: "center",
+    width: "100%",
+  },
+  details: {
+    fontSize: 12,
+    color: "#a8a8a8",
+    paddingBottom: 20,
+    paddingLeft: 20,
+    paddingRight: 20,
   },
 });
