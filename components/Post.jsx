@@ -176,7 +176,7 @@ export default function Post({
             <Text style={styles.description}>
               <Text style={styles.title}>Title: {postTitle}</Text>
               {"\n\n"}
-              <View style={styles.details}>{postDescription}</View>
+              <Text style={styles.details}>{postDescription}</Text>
             </Text>
           </Pressable>
 
