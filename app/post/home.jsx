@@ -18,7 +18,7 @@ export default function PostHome() {
     <ScrollView contentContainerStyle={styles.scrollContainer}>
       <View style={styles.container}>
         <Text style={styles.title}>Post Home Page</Text>
-        <div>
+        <View>
           {posts.map((post) => (
             <Post
               key={post._id}
@@ -29,7 +29,7 @@ export default function PostHome() {
               timeStamp={post.createdAt}
             />
           ))}
-        </div>
+        </View>
       </View>
     </ScrollView>
   );

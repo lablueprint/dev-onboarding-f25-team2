@@ -174,9 +174,9 @@ export default function Post({
             }
           >
             <Text style={styles.description}>
-              <b>Title: </b>{postTitle}
+              <Text style={styles.title}>Title: {postTitle}</Text>
               {"\n\n"}
-              <div style={styles.details}>{postDescription}</div>
+              <View style={styles.details}>{postDescription}</View>
             </Text>
           </Pressable>
 
@@ -243,6 +243,9 @@ export default function Post({
 }
 
 const styles = StyleSheet.create({
+  title: {
+    textAlign: "center",
+  },
   scrollContainer: {
     flexGrow: 1,
     backgroundColor: "#f9fafb",

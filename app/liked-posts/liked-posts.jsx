@@ -1,8 +1,8 @@
-import { ScrollView, StyleSheet, View} from 'react-native';
-import React, { useEffect, useState, useCallback } from "react";
 import { useFocusEffect } from '@react-navigation/native';
-import Post from "../../components/Post";
 import axios from 'axios';
+import React, { useState } from "react";
+import { ScrollView, StyleSheet, View } from 'react-native';
+import Post from "../../components/Post";
 
 export default function LikedPosts() {
     const [likedPosts, setLikedPosts] = useState([]);
