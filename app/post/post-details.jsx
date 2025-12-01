@@ -158,48 +158,53 @@ export default function PostDetails() {
         {/* Text to display “Post Title, “Post Description”, and “Username” */}
         <Text style={styles.title}>Post Details</Text>
 
-        <Text>Post Title</Text>
-        {isEditing ? (
-            <TextInput
-                style={styles.input}
-                value={editTitle}
-                onChangeText={setEditTitle}
-            />
-        ) : (
-            <Text style={styles.subtitle}>{postTitle}</Text>
-        )}
+        <View style={styles.card}>
+          <Text style={styles.label}>Post Title</Text>
+          {isEditing ? (
+              <TextInput
+                  style={styles.input}
+                  value={editTitle}
+                  onChangeText={setEditTitle}
+              />
+          ) : (
+              <Text style={styles.subtitle}>{postTitle}</Text>
+          )}
 
-        <Text>Post Description</Text>
-        {isEditing ? (
-            <TextInput
-                style={[styles.input, { height: 100, textAlignVertical: 'top' }]}
-                value={editDescription}
-                onChangeText={setEditDescription}
-                multiline
-            />
-        ) : (
-            <Text style={styles.subtitle}>{postDescription}</Text>
-        )}
+          <Text style={styles.label}>Post Description</Text>
+          {isEditing ? (
+              <TextInput
+                  style={[styles.input, styles.multilineInput]}
+                  value={editDescription}
+                  onChangeText={setEditDescription}
+                  multiline
+              />
+          ) : (
+              <Text style={styles.subtitle}>{postDescription}</Text>
+          )}
 
-        <Text>Username</Text>
-        <Text style={styles.subtitle}>{userName}</Text>
-
-        <Text>Time Stamp</Text>
-        <Text style={styles.subtitle}>{formattedTimeStamp}</Text>
-
-        {isOwner && (
-          <View style={styles.buttonContainer}>
-            <Button title="Delete" onPress={handleDelete} />
-            {isEditing ? (
-                <>
-                    <Button title="Save" onPress={handleSave} />
-                    <Button title="Cancel" onPress={handleCancelEdit} color="red" />
-                </>
-            ) : (
-                <Button title="Edit" onPress={handleEdit} />
-            )}
+          <View style={styles.metaSection}>
+            <Text style={styles.label}>Username</Text>
+            <Text style={styles.subtitle}>{userName}</Text>
+            <Text style={styles.label}>Time Stamp</Text>
+            <Text style={styles.subtitle}>{formattedTimeStamp}</Text>
           </View>
-        )}
+
+          {isOwner && (
+            <View style={styles.buttonContainer}>
+              <View style={styles.buttonRow}>
+                <View style={styles.buttonSpacer}><Button title="Delete" onPress={handleDelete} /></View>
+                {isEditing ? (
+                    <>
+                      <View style={styles.buttonSpacer}><Button title="Save" onPress={handleSave} /></View>
+                      <View style={styles.buttonSpacer}><Button title="Cancel" onPress={handleCancelEdit} color="red" /></View>
+                    </>
+                ) : (
+                    <View style={styles.buttonSpacer}><Button title="Edit" onPress={handleEdit} /></View>
+                )}
+              </View>
+            </View>
+          )}
+        </View>
 
         </View>
 
@@ -211,40 +216,86 @@ export default function PostDetails() {
 const styles = StyleSheet.create({
   scrollContainer: {
     flexGrow: 1,
-    backgroundColor: '#f9fafb',
+    backgroundColor: '#F3F4F6', // slightly lighter background
+    paddingVertical: 16,
   },
   container: {
     flex: 1,
     alignItems: 'center',
-    padding: 20,
+    paddingHorizontal: 16,
   },
   title: {
     fontSize: 28,
     fontWeight: '700',
-    marginBottom: 8,
+    marginBottom: 12,
     color: '#111827',
     textAlign: 'center',
   },
+  card: {
+    width: '100%',
+    maxWidth: 720,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    padding: 16,
+    shadowColor: '#000',
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 2,
+  },
+  label: {
+    fontSize: 14,
+    color: '#374151',
+    marginBottom: 6,
+    fontWeight: '600',
+  },
   subtitle: {
     fontSize: 16,
-    color: '#6b7280',
-    textAlign: 'center',
-    marginBottom: 20,
+    color: '#4B5563',
+    textAlign: 'left',
+    marginBottom: 16,
   }, 
   input: {
     fontSize: 16,
-    color: '#000',
+    color: '#111827',
     textAlign: 'left',
-    marginBottom: 20,
+    marginBottom: 16,
     borderWidth: 1,
-    borderColor: '#ccc',
-    padding: 10,
+    borderColor: '#E5E7EB',
+    padding: 12,
     width: '100%',
-    borderRadius: 5,
-    backgroundColor: '#fff',
+    borderRadius: 8,
+    backgroundColor: '#FAFAFA',
+  },
+  multilineInput: {
+    height: 120,
+    textAlignVertical: 'top',
+  },
+  row: {
+    flexDirection: 'row',
+    gap: 16,
+    justifyContent: 'space-between',
+    marginTop: 8,
+    marginBottom: 8,
+  },
+  rowItem: {
+    flex: 1,
+    marginRight: 8,
+  },
+  metaSection: {
+    marginTop: 8,
+    marginBottom: 8,
   },
   buttonContainer: {
     width: '100%',
-    marginTop: 10,
+    marginTop: 8,
+  },
+  buttonRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+  buttonSpacer: {
+    marginRight: 8,
+    marginTop: 8,
   },
 });
