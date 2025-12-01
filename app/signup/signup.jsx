@@ -1,8 +1,12 @@
+import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Alert, Button, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 
 export default function SignupPage() 
 {
+
+    const router = useRouter();
+
     const [firstname, setFirstname] = useState('');
     const [lastname, setLastname] = useState('');
     const [username, setUsername] = useState('');
@@ -38,6 +42,8 @@ export default function SignupPage()
         console.log({lastname});
         console.log({username});
         console.log({password});
+
+        router.push('/post/home');
     };
 
     return (
