@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import {ScrollView , StyleSheet, TextInput, Button, Text, View } from 'react-native';
+import { Button, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 
 
 export default function CreatePost() {
