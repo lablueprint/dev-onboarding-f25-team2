@@ -78,8 +78,7 @@ export default function Post({postTitle, postDescription, postId, userName, time
               })
             }
           >
-            <Text>This is one post</Text>
-            <Text>{'\n'}{postTitle} {postDescription}</Text>
+            <Text>{'\n'}{postTitle}{'\n'}{postDescription}</Text>
           </Pressable>
 
           <View style={styles.headerContainer}>
@@ -91,45 +90,44 @@ export default function Post({postTitle, postDescription, postId, userName, time
             { liked ? <Heart onPress={handleLike} color="red" fill="red"/> 
                   : <Heart onPress={handleLike} color="red"/> }
           </View>
-        </View>
 
-        <Text>{'\n'}{postTitle} {postDescription}</Text>
-        {allComments && allComments.length > 0 && 
-          <>
-            <Text style={styles.commentsViewHeader}>Comments:</Text>
-            <View style={styles.commentsViewContainer}>
-              <ScrollView>
-                  {allComments.map((comment, id) => {
-                    return(
-                      <Text
-                        key={`comment_${id}`}
-                        style={[
-                          styles.commentsView,
-                          {backgroundColor: id%2===0 ? 'lightgrey' : '#f9fafb'},
-                          {backgroundColor: id%2===0 ? 'lightgrey' : '#f9fafb'},
-                        ]}
-                      >
-                        {comment}
-                      </Text>
-                    )
-                  })}
-              </ScrollView>
-            </View>
-          </>
-        }
-        <View style={styles.commentsAddWrapper}>
-          <TextInput
-            style={styles.commentsInput}
-            placeholder="Enter a comment"
-            value={newComment}
-            onChangeText={setNewComment}
-          />
-          <AntDesign
-            name="comment"
-            size={20}
-            color="black"
-            onPress={addComment}
-          />
+          {allComments && allComments.length > 0 && 
+            <>
+              <Text style={styles.commentsViewHeader}>Comments:</Text>
+              <View style={styles.commentsViewContainer}>
+                <ScrollView>
+                    {allComments.map((comment, id) => {
+                      return(
+                        <Text
+                          key={`comment_${id}`}
+                          style={[
+                            styles.commentsView,
+                            {backgroundColor: id%2===0 ? 'lightgrey' : '#f9fafb'},
+                            {backgroundColor: id%2===0 ? 'lightgrey' : '#f9fafb'},
+                          ]}
+                        >
+                          {comment}
+                        </Text>
+                      )
+                    })}
+                </ScrollView>
+              </View>
+            </>
+          }
+          <View style={styles.commentsAddWrapper}>
+            <TextInput
+              style={styles.commentsInput}
+              placeholder="Enter a comment"
+              value={newComment}
+              onChangeText={setNewComment}
+            />
+            <AntDesign
+              name="comment"
+              size={20}
+              color="black"
+              onPress={addComment}
+            />
+          </View>
         </View>
       </View>
     </ScrollView>
