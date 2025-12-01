@@ -3,8 +3,8 @@ const {
     getAllPosts, 
     getPost,
     createPost,
-    deletePost
-
+    deletePost,
+    addComment,
 } = require('../controllers/postController');
 
 const router = express.Router();
@@ -14,5 +14,6 @@ router.get('/', getAllPosts);
 router.get('/:id', getPost);
 router.post('/', createPost);
 router.delete('/:id', deletePost);
+router.patch('/:id', addComment);
 
 module.exports = router;

@@ -21,6 +21,7 @@ export default function PostHome() {
             {posts.map((post) => (
               <Post
                 key={post._id}
+                postID={post._id}
                 postTitle={post.title}
                 postDescription={post.description}
                 postComments={post.comments}

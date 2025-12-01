@@ -5,7 +5,8 @@ import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-
 
 import { useRouter } from 'expo-router';
 
-export default function Post({postTitle, postDescription, postComments}) {
+export default function Post({postID, postTitle, postDescription, postComments}) {
+  const url = 'http://localhost:4000' // TODO: Placeholder url
 
   const router = useRouter();
   const [liked, setLiked] = useState(false);
@@ -25,9 +26,22 @@ export default function Post({postTitle, postDescription, postComments}) {
     if(newComment === ''){
       return;
     }
+    
+    // PATCH request to update comments field for post
+    addCommentToBackend();
     setAllComments([...allComments, newComment]);
     setNewComment('');
-    // TODO: POST request for comments
+  }
+
+  // update backend by adding comment to corresponding post
+  async function addCommentToBackend () {
+    const response = await fetch(`${url}/api/posts/${postID}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ commentText: newComment, userID: 'tester' }) // TODO: placeholder userID
+    })
+    const result = await response.json()
+    console.log(result)
   }
   
   const [isBookmarked, setIsBookmarked] = useState(false);

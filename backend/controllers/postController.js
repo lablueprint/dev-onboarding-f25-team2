@@ -51,9 +51,33 @@ const deletePost = async (req, res) => {
   res.status(200).json(post)
 }
 
+// update comments for a post
+const addComment = async (req, res) => {
+  const { id } = req.params
+  const { commentText, userID } = req.body
+
+  if (!mongoose.Types.ObjectId.isValid(id)){
+    return res.status(404).json({ error: "post not found" })
+  }
+
+  const newComment = {commentText: commentText, userID: userID}
+  const updatedPost = await Post.findByIdAndUpdate(
+    id,
+    {$push: {comments: newComment}}, // update comments field only
+    {new: true, runValidators: true}, // return new Post document and validate the changes
+  )
+
+  if(!updatedPost) {
+    return res.status(404).json({error: "post cannot be updated"})
+  }
+
+  res.status(200).json(updatedPost)
+}
+
 module.exports = {
     getAllPosts,
     getPost,
     createPost,
     deletePost,
+    addComment,
 }
