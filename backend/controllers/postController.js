@@ -51,9 +51,29 @@ const deletePost = async (req, res) => {
   res.status(200).json(post)
 }
 
+// update a post
+const updatePost = async (req, res) => {
+  const { id } = req.params
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({ error: "post not found" })
+  }
+
+  const post = await Post.findOneAndUpdate({ _id: id }, {
+    ...req.body
+  }, { new: true })
+
+  if (!post) {
+    return res.status(404).json({ error: "post not found" })
+  }
+
+  res.status(200).json(post)
+}
+
 module.exports = {
     getAllPosts,
     getPost,
     createPost,
     deletePost,
+    updatePost,
 }

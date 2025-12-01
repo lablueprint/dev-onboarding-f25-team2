@@ -3,7 +3,8 @@ const {
     getAllPosts, 
     getPost,
     createPost,
-    deletePost
+    deletePost,
+    updatePost
 
 } = require('../controllers/postController');
 
@@ -14,5 +15,6 @@ router.get('/', getAllPosts);
 router.get('/:id', getPost);
 router.post('/', createPost);
 router.delete('/:id', deletePost);
+router.put('/:id', updatePost);
 
 module.exports = router;
