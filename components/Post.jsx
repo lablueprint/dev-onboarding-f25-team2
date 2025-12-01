@@ -192,11 +192,6 @@ export default function Post({
             ) : (
               <Heart onPress={handleOnPress} color="red" />
             )}
-            {liked ? (
-              <Heart onPress={handleLike} color="red" fill="red" />
-            ) : (
-              <Heart onPress={handleLike} color="red" />
-            )}
           </View>
 
           {allComments && allComments.length > 0 && (
@@ -265,6 +260,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     width: "100%",
+    paddingHorizontal: 35,
   },
   buttonContainer: {
     display: "flex",
