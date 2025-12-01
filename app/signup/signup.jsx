@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
+import { Alert, Button, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 
 export default function SignupPage() 
 {
@@ -10,6 +10,29 @@ export default function SignupPage()
     const [confirmPassword, setConfirmPassword] = useState('');
 
     const handleSubmit = () => {
+        /*
+        console.log("Form Submitted!");
+        console.log({firstname});
+        console.log({lastname});
+        console.log({username});
+        console.log({password});
+        */
+
+        const isValidLength = password.length > 8;
+        const hasNumber = /\d/.test(password);
+
+        if (!isValidLength || !hasNumber)
+        {
+            Alert.alert("Invalid Password", "Password must be longer than 8 characters and contain at least one number.");
+            return;
+        }
+
+        if (password !== confirmPassword)
+        {
+            Alert.alert("Password Mismatch", "The Password and Confirm Password fields do not match");
+            return;
+        }
+        
         console.log("Form Submitted!");
         console.log({firstname});
         console.log({lastname});
