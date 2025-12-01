@@ -1,7 +1,8 @@
 import AntDesign from "@expo/vector-icons/AntDesign";
 import axios from "axios";
+import { useRouter } from "expo-router";
 import { Bookmark, BookmarkCheck, Heart } from "lucide-react-native";
-import { useCallback, useState, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   Pressable,
   ScrollView,
@@ -10,12 +11,6 @@ import {
   TextInput,
   View,
 } from "react-native";
-import { useRouter } from "expo-router";
-import axios from 'axios';
-const url = "http://localhost:4000";
-
-export default function Post({postTitle, postDescription, postId, userName, timeStamp, currentUsername}) {
-  const url = 'http://localhost:4000'
 
 export default function Post({
   postTitle,
@@ -25,6 +20,8 @@ export default function Post({
   timeStamp,
   currentUsername,
 }) {
+  const url = "http://localhost:4000";
+
   const router = useRouter();
   const [liked, setLiked] = useState(false);
 
@@ -36,26 +33,28 @@ export default function Post({
       } catch {
         setLiked(false);
       }
-    }
+    };
     checkIsLiked();
   }, [liked, postId]);
 
   const handleLike = async () => {
     const likeData = {
-      "postId": postId,
-      "title": postTitle,
-      "description": postDescription,
-    }
+      postId: postId,
+      title: postTitle,
+      description: postDescription,
+    };
 
     const unlikeData = {
-      "postId": postId
-    }
+      postId: postId,
+    };
 
-    if(liked) {
+    if (liked) {
       await axios.post(`${url}/api/likedPosts/unlikePost`, unlikeData);
     } else {
       await axios.post(`${url}/api/likedPosts/likePost`, likeData);
     }
+  };
+
   const [isBookmarked, setIsBookmarked] = useState(false);
 
   // Function to check if post is saved
@@ -176,7 +175,9 @@ export default function Post({
           >
             <Text>
               {"\n"}
-              {postTitle}{'\n'}{postDescription}
+              {postTitle}
+              {"\n"}
+              {postDescription}
             </Text>
           </Pressable>
 
@@ -191,33 +192,42 @@ export default function Post({
             ) : (
               <Heart onPress={handleOnPress} color="red" />
             )}
-            { liked ? <Heart onPress={handleLike} color="red" fill="red"/> 
-                  : <Heart onPress={handleLike} color="red"/> }
+            {liked ? (
+              <Heart onPress={handleLike} color="red" fill="red" />
+            ) : (
+              <Heart onPress={handleLike} color="red" />
+            )}
           </View>
 
-          {allComments && allComments.length > 0 && 
+          {allComments && allComments.length > 0 && (
             <>
               <Text style={styles.commentsViewHeader}>Comments:</Text>
               <View style={styles.commentsViewContainer}>
                 <ScrollView>
-                    {allComments.map((comment, id) => {
-                      return(
-                        <Text
-                          key={`comment_${id}`}
-                          style={[
-                            styles.commentsView,
-                            {backgroundColor: id%2===0 ? 'lightgrey' : '#f9fafb'},
-                            {backgroundColor: id%2===0 ? 'lightgrey' : '#f9fafb'},
-                          ]}
-                        >
-                          {comment}
-                        </Text>
-                      )
-                    })}
+                  {allComments.map((comment, id) => {
+                    return (
+                      <Text
+                        key={`comment_${id}`}
+                        style={[
+                          styles.commentsView,
+                          {
+                            backgroundColor:
+                              id % 2 === 0 ? "lightgrey" : "#f9fafb",
+                          },
+                          {
+                            backgroundColor:
+                              id % 2 === 0 ? "lightgrey" : "#f9fafb",
+                          },
+                        ]}
+                      >
+                        {comment}
+                      </Text>
+                    );
+                  })}
                 </ScrollView>
               </View>
             </>
-          }
+          )}
           <View style={styles.commentsAddWrapper}>
             <TextInput
               style={styles.commentsInput}
